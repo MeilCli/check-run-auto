@@ -1,5 +1,5 @@
-# action-template
-This repository is my GitHub Action Repository template
+# check-run-auto
+check run action
 
 ## License
 MIT License

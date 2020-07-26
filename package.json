@@ -1,5 +1,5 @@
 {
-    "name": "action-template",
+    "name": "check-run-auto",
     "version": "1.0.0",
     "description": "",
     "main": "lib/main.js",
@@ -13,7 +13,8 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@actions/core": "^1.2.4"
+        "@actions/core": "^1.2.4",
+        "@actions/github": "^4.0.0"
     },
     "devDependencies": {
         "@types/jest": "^26.0.7",
