@@ -320,25 +320,33 @@ var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
 var option_1 = __webpack_require__(983);
 var state_1 = __webpack_require__(77);
+var conclusionList = [
+    "success",
+    "failure",
+    "neutral",
+    "cancelled",
+    "skipped",
+    "timed_out",
+    "action_required",
+];
 function run() {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var state, option, optionOutput, client, owner, repository, response, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var state, option_2, optionOutput, client, owner, repository, conclusion, response, error_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
+                    _c.trys.push([0, 2, , 3]);
                     state = state_1.getState();
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    option = option_1.getOption();
+                    option_2 = option_1.getOption();
                     optionOutput = option_1.getOptionOutput();
                     if (state.checkRunId == null || state.failed) {
                         throw new Error("found some error on pre action");
                     }
-                    client = github.getOctokit(option.githubToken);
-                    owner = option.repository.split("/")[0];
-                    repository = option.repository.split("/")[1];
+                    client = github.getOctokit(option_2.githubToken);
+                    owner = option_2.repository.split("/")[0];
+                    repository = option_2.repository.split("/")[1];
+                    conclusion = (_a = conclusionList.find(function (x) { return x == option_2.result; })) !== null && _a !== void 0 ? _a : "success";
                     return [4 /*yield*/, client.checks.update({
                             owner: owner,
                             repo: repository,
@@ -346,22 +354,23 @@ function run() {
                             output: {
                                 title: optionOutput.title,
                                 summary: optionOutput.surmmary,
-                                text: (_a = optionOutput.text) !== null && _a !== void 0 ? _a : undefined,
+                                text: (_b = optionOutput.text) !== null && _b !== void 0 ? _b : undefined,
                             },
+                            status: "completed",
+                            conclusion: state.failed ? "failure" : conclusion,
                         })];
-                case 2:
-                    response = _b.sent();
+                case 1:
+                    response = _c.sent();
                     if (400 <= response.status) {
                         throw new Error("cannot update check run");
                     }
                     core.setOutput("check_run_id", "" + state.checkRunId);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _b.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _c.sent();
                     core.setFailed(error_1.message);
-                    state_1.setState({ checkRunId: state.checkRunId, failed: true });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
