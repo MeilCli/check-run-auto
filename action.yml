@@ -4,6 +4,38 @@ author: 'MeilCli'
 branding:
   icon: check
   color: purple
+inputs:
+  github_token:
+    description: 'github token, using to read and write repository'
+    required: true
+    default: ${{ github.token }}
+  repository:
+    description: 'running repository, format: owner/repository'
+    required: true
+    default: ${{ github.repository }}
+  sha:
+    description: 'commit sha'
+    required: true
+    default: ${{ github.sha }}
+  name:
+    description: 'name of check run, should be unique'
+    required: true
+  details_url:
+    description: 'details url'
+  result:
+    description: 'result of check run, see conclusion parameter at API reference'
+  output_title:
+    description: 'title of output'
+    required: true
+  output_surmmary:
+    description: 'surmmary of output'
+    required: true
+  output_text:
+    description: 'text of output'
+outputs:
+  check_run_id:
+    description: 'check run id'
+
 runs:
   using: 'node12'
   pre: 'dist/pre/index.js'
