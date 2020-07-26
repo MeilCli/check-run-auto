@@ -16,7 +16,7 @@ inputs:
   sha:
     description: 'commit sha'
     required: true
-    default: ${{ github.sha }}
+    default: ${{ github.event.pull_request.head.sha }}
   name:
     description: 'name of check run, should be unique'
     required: true
