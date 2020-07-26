@@ -1,9 +1,11 @@
-name: 'template name'
-description: 'template description'
+name: 'check run auto'
+description: 'check run auto create, update and complete action'
 author: 'MeilCli'
 branding:
-  icon: package
-  color: gray-dark
+  icon: check
+  color: purple
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  pre: 'dist/pre/index.js'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'

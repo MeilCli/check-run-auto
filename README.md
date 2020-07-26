@@ -1,5 +1,5 @@
 # check-run-auto
-check run action
+check run auto create, update and complete action
 
 ## License
 MIT License
