@@ -651,14 +651,14 @@ function run() {
                         throw new Error("cannot create check run");
                     }
                     state_1.setState({ checkRunId: response.data.id, failed: false });
-                    _c.label = 5;
+                    return [2 /*return*/, response.data.id];
                 case 5: return [3 /*break*/, 7];
                 case 6:
                     error_1 = _c.sent();
                     core.setFailed(error_1.message);
                     state_1.setState({ checkRunId: null, failed: true });
                     return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                case 7: return [2 /*return*/, null];
             }
         });
     });
