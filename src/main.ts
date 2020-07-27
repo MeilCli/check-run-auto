@@ -31,6 +31,7 @@ async function run() {
         const owner = option.repository.split("/")[0];
         const repository = option.repository.split("/")[1];
         const conclusion: Conclusion = conclusionList.find((x) => x == option.result) ?? "success";
+        core.info("update check run as completed");
         const response = await client.checks.update({
             owner: owner,
             repo: repository,
@@ -46,6 +47,7 @@ async function run() {
         if (400 <= response.status) {
             throw new Error("cannot update check run");
         }
+        core.info("all complete");
         core.setOutput("check_run_id", `${checkRunId}`);
     } catch (error) {
         core.setFailed(error.message);

@@ -12,6 +12,9 @@ async function findCheckRun(
     name: string
 ): Promise<number | null> {
     const response = await client.checks.listForRef({ owner: owner, repo: repository, ref: sha, check_name: name });
+    if (400 <= response.status) {
+        core.info(`error founde! ${response.headers.status}`);
+    }
     return response?.data?.check_runs?.find((x) => x.name == name)?.id ?? null;
 }
 
@@ -21,8 +24,9 @@ export async function run(): Promise<number | null> {
         const client = github.getOctokit(option.githubToken);
         const owner = option.repository.split("/")[0];
         const repository = option.repository.split("/")[1];
-
+        core.info("find check run");
         const foundCheckRunId = await findCheckRun(client, owner, repository, option.sha, option.name);
+        core.info(`found check run: ${foundCheckRunId != null}`);
         if (foundCheckRunId != null) {
             const response = await client.checks.update({
                 owner: owner,
@@ -35,6 +39,7 @@ export async function run(): Promise<number | null> {
                 throw new Error("cannot update check run");
             }
             setState({ checkRunId: foundCheckRunId, failed: false });
+            core.info(`found check run updated`);
             return foundCheckRunId;
         } else {
             const response = await client.checks.create({
@@ -49,6 +54,7 @@ export async function run(): Promise<number | null> {
                 throw new Error("cannot create check run");
             }
             setState({ checkRunId: response.data.id, failed: false });
+            core.info("check run created");
             return response.data.id;
         }
     } catch (error) {
