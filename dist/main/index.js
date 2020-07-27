@@ -333,19 +333,19 @@ var conclusionList = [
 function run() {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var state, option_2, optionOutput, client, owner, repository, conclusion, response, error_1;
+        var checkRunId, state, option_2, optionOutput, client, owner, repository, conclusion, response, error_1;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0: return [4 /*yield*/, pre_1.run()];
                 case 1:
-                    _c.sent();
+                    checkRunId = _c.sent();
                     _c.label = 2;
                 case 2:
                     _c.trys.push([2, 4, , 5]);
                     state = state_1.getState();
                     option_2 = option_1.getOption();
                     optionOutput = option_1.getOptionOutput();
-                    if (state.checkRunId == null || state.failed) {
+                    if (checkRunId == null || state.failed) {
                         throw new Error("found some error on pre action");
                     }
                     client = github.getOctokit(option_2.githubToken);
@@ -355,7 +355,7 @@ function run() {
                     return [4 /*yield*/, client.checks.update({
                             owner: owner,
                             repo: repository,
-                            check_run_id: state.checkRunId,
+                            check_run_id: checkRunId,
                             output: {
                                 title: optionOutput.title,
                                 summary: optionOutput.surmmary,
@@ -369,7 +369,7 @@ function run() {
                     if (400 <= response.status) {
                         throw new Error("cannot update check run");
                     }
-                    core.setOutput("check_run_id", "" + state.checkRunId);
+                    core.setOutput("check_run_id", "" + checkRunId);
                     return [3 /*break*/, 5];
                 case 4:
                     error_1 = _c.sent();
@@ -781,14 +781,14 @@ function run() {
                         throw new Error("cannot create check run");
                     }
                     state_1.setState({ checkRunId: response.data.id, failed: false });
-                    _c.label = 5;
+                    return [2 /*return*/, response.data.id];
                 case 5: return [3 /*break*/, 7];
                 case 6:
                     error_1 = _c.sent();
                     core.setFailed(error_1.message);
                     state_1.setState({ checkRunId: null, failed: true });
                     return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                case 7: return [2 /*return*/, null];
             }
         });
     });
