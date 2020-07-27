@@ -588,6 +588,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.run = void 0;
 var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
 var option_1 = __webpack_require__(983);
@@ -662,6 +663,7 @@ function run() {
         });
     });
 }
+exports.run = run;
 run();
 
 
