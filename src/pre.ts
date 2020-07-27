@@ -35,6 +35,7 @@ export async function run(): Promise<number | null> {
                 throw new Error("cannot update check run");
             }
             setState({ checkRunId: foundCheckRunId, failed: false });
+            return foundCheckRunId;
         } else {
             const response = await client.checks.create({
                 owner: owner,

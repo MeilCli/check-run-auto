@@ -21,8 +21,11 @@ async function run() {
         const state = getState();
         const option = getOption();
         const optionOutput = getOptionOutput();
-        if (checkRunId == null || state.failed) {
-            throw new Error("found some error on pre action");
+        if (checkRunId == null) {
+            throw new Error("found some error on pre action, check run is null");
+        }
+        if (state.failed) {
+            throw new Error("found some error on pre action, pre action is failed");
         }
         const client = github.getOctokit(option.githubToken);
         const owner = option.repository.split("/")[0];
