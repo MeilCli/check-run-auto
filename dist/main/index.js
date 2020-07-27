@@ -345,8 +345,11 @@ function run() {
                     state = state_1.getState();
                     option_2 = option_1.getOption();
                     optionOutput = option_1.getOptionOutput();
-                    if (checkRunId == null || state.failed) {
-                        throw new Error("found some error on pre action");
+                    if (checkRunId == null) {
+                        throw new Error("found some error on pre action, check run is null");
+                    }
+                    if (state.failed) {
+                        throw new Error("found some error on pre action, pre action is failed");
                     }
                     client = github.getOctokit(option_2.githubToken);
                     owner = option_2.repository.split("/")[0];
@@ -766,7 +769,7 @@ function run() {
                         throw new Error("cannot update check run");
                     }
                     state_1.setState({ checkRunId: foundCheckRunId, failed: false });
-                    return [3 /*break*/, 5];
+                    return [2 /*return*/, foundCheckRunId];
                 case 3: return [4 /*yield*/, client.checks.create({
                         owner: owner,
                         repo: repository,
