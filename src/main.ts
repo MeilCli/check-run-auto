@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { getOption, getOptionOutput } from "./option";
 import { getState } from "./state";
+import { run as preRun } from "./pre";
 
 const conclusionList = [
     "success",
@@ -15,6 +16,7 @@ const conclusionList = [
 type Conclusion = typeof conclusionList[number];
 
 async function run() {
+    await preRun();
     try {
         const state = getState();
         const option = getOption();

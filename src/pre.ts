@@ -15,7 +15,7 @@ async function findCheckRun(
     return response?.data?.check_runs?.find((x) => x.name == name)?.id ?? null;
 }
 
-async function run() {
+export async function run() {
     try {
         const option = getOption();
         const client = github.getOctokit(option.githubToken);
