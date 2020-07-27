@@ -602,6 +602,9 @@ function findCheckRun(client, owner, repository, sha, name) {
                 case 0: return [4 /*yield*/, client.checks.listForRef({ owner: owner, repo: repository, ref: sha, check_name: name })];
                 case 1:
                     response = _e.sent();
+                    if (400 <= response.status) {
+                        core.info("error founde! " + response.headers.status);
+                    }
                     return [2 /*return*/, (_d = (_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.check_runs) === null || _b === void 0 ? void 0 : _b.find(function (x) { return x.name == name; })) === null || _c === void 0 ? void 0 : _c.id) !== null && _d !== void 0 ? _d : null];
             }
         });
@@ -619,9 +622,11 @@ function run() {
                     client = github.getOctokit(option.githubToken);
                     owner = option.repository.split("/")[0];
                     repository = option.repository.split("/")[1];
+                    core.info("find check run");
                     return [4 /*yield*/, findCheckRun(client, owner, repository, option.sha, option.name)];
                 case 1:
                     foundCheckRunId = _c.sent();
+                    core.info("found check run: " + (foundCheckRunId != null));
                     if (!(foundCheckRunId != null)) return [3 /*break*/, 3];
                     return [4 /*yield*/, client.checks.update({
                             owner: owner,
@@ -636,6 +641,7 @@ function run() {
                         throw new Error("cannot update check run");
                     }
                     state_1.setState({ checkRunId: foundCheckRunId, failed: false });
+                    core.info("found check run updated");
                     return [2 /*return*/, foundCheckRunId];
                 case 3: return [4 /*yield*/, client.checks.create({
                         owner: owner,
@@ -651,6 +657,7 @@ function run() {
                         throw new Error("cannot create check run");
                     }
                     state_1.setState({ checkRunId: response.data.id, failed: false });
+                    core.info("check run created");
                     return [2 /*return*/, response.data.id];
                 case 5: return [3 /*break*/, 7];
                 case 6:
