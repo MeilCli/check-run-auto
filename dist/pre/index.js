@@ -636,7 +636,7 @@ function run() {
                         throw new Error("cannot update check run");
                     }
                     state_1.setState({ checkRunId: foundCheckRunId, failed: false });
-                    return [3 /*break*/, 5];
+                    return [2 /*return*/, foundCheckRunId];
                 case 3: return [4 /*yield*/, client.checks.create({
                         owner: owner,
                         repo: repository,
