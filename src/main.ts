@@ -16,12 +16,12 @@ const conclusionList = [
 type Conclusion = typeof conclusionList[number];
 
 async function run() {
-    await preRun();
+    const checkRunId = await preRun();
     try {
         const state = getState();
         const option = getOption();
         const optionOutput = getOptionOutput();
-        if (state.checkRunId == null || state.failed) {
+        if (checkRunId == null || state.failed) {
             throw new Error("found some error on pre action");
         }
         const client = github.getOctokit(option.githubToken);
@@ -31,7 +31,7 @@ async function run() {
         const response = await client.checks.update({
             owner: owner,
             repo: repository,
-            check_run_id: state.checkRunId,
+            check_run_id: checkRunId,
             output: {
                 title: optionOutput.title,
                 summary: optionOutput.surmmary,
@@ -43,7 +43,7 @@ async function run() {
         if (400 <= response.status) {
             throw new Error("cannot update check run");
         }
-        core.setOutput("check_run_id", `${state.checkRunId}`);
+        core.setOutput("check_run_id", `${checkRunId}`);
     } catch (error) {
         core.setFailed(error.message);
     }

@@ -15,7 +15,7 @@ async function findCheckRun(
     return response?.data?.check_runs?.find((x) => x.name == name)?.id ?? null;
 }
 
-export async function run() {
+export async function run(): Promise<number | null> {
     try {
         const option = getOption();
         const client = github.getOctokit(option.githubToken);
@@ -48,11 +48,13 @@ export async function run() {
                 throw new Error("cannot create check run");
             }
             setState({ checkRunId: response.data.id, failed: false });
+            return response.data.id;
         }
     } catch (error) {
         core.setFailed(error.message);
         setState({ checkRunId: null, failed: true });
     }
+    return null;
 }
 
 run();
