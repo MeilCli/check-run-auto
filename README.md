@@ -1,6 +1,9 @@
 # check-run-auto
 check run auto create, update and complete action
 
+## Contributing
+see [Contributing.md](./.github/CONTRIBUTING.md)
+
 ## License
 MIT License
 
