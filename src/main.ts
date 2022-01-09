@@ -32,7 +32,7 @@ async function run() {
         const repository = option.repository.split("/")[1];
         const conclusion: Conclusion = conclusionList.find((x) => x == option.result) ?? "success";
         core.info("update check run as completed");
-        const response = await client.checks.update({
+        const response = await client.rest.checks.update({
             owner: owner,
             repo: repository,
             check_run_id: checkRunId,
@@ -50,7 +50,9 @@ async function run() {
         core.info("all complete");
         core.setOutput("check_run_id", `${checkRunId}`);
     } catch (error) {
-        core.setFailed(error.message);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
     }
 }
 

@@ -11,7 +11,12 @@ async function findCheckRun(
     sha: string,
     name: string
 ): Promise<number | null> {
-    const response = await client.checks.listForRef({ owner: owner, repo: repository, ref: sha, check_name: name });
+    const response = await client.rest.checks.listForRef({
+        owner: owner,
+        repo: repository,
+        ref: sha,
+        check_name: name,
+    });
     if (400 <= response.status) {
         core.info(`error founde! ${response.headers.status}`);
     }
@@ -28,7 +33,7 @@ export async function run(): Promise<number | null> {
         const foundCheckRunId = await findCheckRun(client, owner, repository, option.sha, option.name);
         core.info(`found check run: ${foundCheckRunId != null}`);
         if (foundCheckRunId != null) {
-            const response = await client.checks.update({
+            const response = await client.rest.checks.update({
                 owner: owner,
                 repo: repository,
                 check_run_id: foundCheckRunId,
@@ -42,7 +47,7 @@ export async function run(): Promise<number | null> {
             core.info(`found check run updated`);
             return foundCheckRunId;
         } else {
-            const response = await client.checks.create({
+            const response = await client.rest.checks.create({
                 owner: owner,
                 repo: repository,
                 name: option.name,
@@ -58,7 +63,9 @@ export async function run(): Promise<number | null> {
             return response.data.id;
         }
     } catch (error) {
-        core.setFailed(error.message);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
         setState({ checkRunId: null, failed: true });
     }
     return null;
