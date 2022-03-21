@@ -8983,49 +8983,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var core = __importStar(__nccwpck_require__(2186));
-var github = __importStar(__nccwpck_require__(5438));
-var option_1 = __nccwpck_require__(3451);
-var state_1 = __nccwpck_require__(9738);
-var pre_1 = __nccwpck_require__(4153);
-var conclusionList = [
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const option_1 = __nccwpck_require__(3451);
+const state_1 = __nccwpck_require__(9738);
+const pre_1 = __nccwpck_require__(4153);
+const conclusionList = [
     "success",
     "failure",
     "neutral",
@@ -9034,62 +8998,46 @@ var conclusionList = [
     "timed_out",
     "action_required",
 ];
-function run() {
-    var _a, _b;
-    return __awaiter(this, void 0, void 0, function () {
-        var checkRunId, state, option_2, optionOutput, client, owner, repository, conclusion, response, error_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0: return [4 /*yield*/, (0, pre_1.run)()];
-                case 1:
-                    checkRunId = _c.sent();
-                    _c.label = 2;
-                case 2:
-                    _c.trys.push([2, 4, , 5]);
-                    state = (0, state_1.getState)();
-                    option_2 = (0, option_1.getOption)();
-                    optionOutput = (0, option_1.getOptionOutput)();
-                    if (checkRunId == null) {
-                        throw new Error("found some error on pre action, check run is null");
-                    }
-                    if (state.failed) {
-                        throw new Error("found some error on pre action, pre action is failed");
-                    }
-                    client = github.getOctokit(option_2.githubToken);
-                    owner = option_2.repository.split("/")[0];
-                    repository = option_2.repository.split("/")[1];
-                    conclusion = (_a = conclusionList.find(function (x) { return x == option_2.result; })) !== null && _a !== void 0 ? _a : "success";
-                    core.info("update check run as completed");
-                    return [4 /*yield*/, client.rest.checks.update({
-                            owner: owner,
-                            repo: repository,
-                            check_run_id: checkRunId,
-                            output: {
-                                title: optionOutput.title,
-                                summary: optionOutput.surmmary,
-                                text: (_b = optionOutput.text) !== null && _b !== void 0 ? _b : undefined,
-                            },
-                            status: "completed",
-                            conclusion: state.failed ? "failure" : conclusion,
-                        })];
-                case 3:
-                    response = _c.sent();
-                    if (400 <= response.status) {
-                        throw new Error("cannot update check run");
-                    }
-                    core.info("all complete");
-                    core.setOutput("check_run_id", "".concat(checkRunId));
-                    return [3 /*break*/, 5];
-                case 4:
-                    error_1 = _c.sent();
-                    if (error_1 instanceof Error) {
-                        core.setFailed(error_1.message);
-                    }
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
-            }
+async function run() {
+    const checkRunId = await (0, pre_1.run)();
+    try {
+        const state = (0, state_1.getState)();
+        const option = (0, option_1.getOption)();
+        const optionOutput = (0, option_1.getOptionOutput)();
+        if (checkRunId == null) {
+            throw new Error("found some error on pre action, check run is null");
+        }
+        if (state.failed) {
+            throw new Error("found some error on pre action, pre action is failed");
+        }
+        const client = github.getOctokit(option.githubToken);
+        const owner = option.repository.split("/")[0];
+        const repository = option.repository.split("/")[1];
+        const conclusion = conclusionList.find((x) => x == option.result) ?? "success";
+        core.info("update check run as completed");
+        const response = await client.rest.checks.update({
+            owner: owner,
+            repo: repository,
+            check_run_id: checkRunId,
+            output: {
+                title: optionOutput.title,
+                summary: optionOutput.surmmary,
+                text: optionOutput.text ?? undefined,
+            },
+            status: "completed",
+            conclusion: state.failed ? "failure" : conclusion,
         });
-    });
+        if (400 <= response.status) {
+            throw new Error("cannot update check run");
+        }
+        core.info("all complete");
+        core.setOutput("check_run_id", `${checkRunId}`);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
+    }
 }
 run();
 
@@ -9126,7 +9074,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOptionOutput = exports.getOption = void 0;
-var core = __importStar(__nccwpck_require__(2186));
+const core = __importStar(__nccwpck_require__(2186));
 function getOption() {
     return {
         githubToken: getInput("github_token"),
@@ -9150,7 +9098,7 @@ function getInput(key) {
     return core.getInput(key, { required: true });
 }
 function getInputOrNull(key) {
-    var result = core.getInput(key, { required: false });
+    const result = core.getInput(key, { required: false });
     if (result.length == 0) {
         return null;
     }
@@ -9188,131 +9136,72 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-var core = __importStar(__nccwpck_require__(2186));
-var github = __importStar(__nccwpck_require__(5438));
-var option_1 = __nccwpck_require__(3451);
-var state_1 = __nccwpck_require__(9738);
-function findCheckRun(client, owner, repository, sha, name) {
-    var _a, _b, _c, _d;
-    return __awaiter(this, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0: return [4 /*yield*/, client.rest.checks.listForRef({
-                        owner: owner,
-                        repo: repository,
-                        ref: sha,
-                        check_name: name,
-                    })];
-                case 1:
-                    response = _e.sent();
-                    if (400 <= response.status) {
-                        core.info("error founde! ".concat(response.headers.status));
-                    }
-                    return [2 /*return*/, (_d = (_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.check_runs) === null || _b === void 0 ? void 0 : _b.find(function (x) { return x.name == name; })) === null || _c === void 0 ? void 0 : _c.id) !== null && _d !== void 0 ? _d : null];
-            }
-        });
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const option_1 = __nccwpck_require__(3451);
+const state_1 = __nccwpck_require__(9738);
+async function findCheckRun(client, owner, repository, sha, name) {
+    const response = await client.rest.checks.listForRef({
+        owner: owner,
+        repo: repository,
+        ref: sha,
+        check_name: name,
     });
+    if (400 <= response.status) {
+        core.info(`error founde! ${response.headers.status}`);
+    }
+    return response?.data?.check_runs?.find((x) => x.name == name)?.id ?? null;
 }
-function run() {
-    var _a, _b;
-    return __awaiter(this, void 0, void 0, function () {
-        var option, client, owner, repository, foundCheckRunId, response, response, error_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 6, , 7]);
-                    option = (0, option_1.getOption)();
-                    client = github.getOctokit(option.githubToken);
-                    owner = option.repository.split("/")[0];
-                    repository = option.repository.split("/")[1];
-                    core.info("find check run");
-                    return [4 /*yield*/, findCheckRun(client, owner, repository, option.sha, option.name)];
-                case 1:
-                    foundCheckRunId = _c.sent();
-                    core.info("found check run: ".concat(foundCheckRunId != null));
-                    if (!(foundCheckRunId != null)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, client.rest.checks.update({
-                            owner: owner,
-                            repo: repository,
-                            check_run_id: foundCheckRunId,
-                            status: "in_progress",
-                            details_url: (_a = option.detailsUrl) !== null && _a !== void 0 ? _a : undefined,
-                        })];
-                case 2:
-                    response = _c.sent();
-                    if (400 <= response.status) {
-                        throw new Error("cannot update check run");
-                    }
-                    (0, state_1.setState)({ checkRunId: foundCheckRunId, failed: false });
-                    core.info("found check run updated");
-                    return [2 /*return*/, foundCheckRunId];
-                case 3: return [4 /*yield*/, client.rest.checks.create({
-                        owner: owner,
-                        repo: repository,
-                        name: option.name,
-                        head_sha: option.sha,
-                        status: "in_progress",
-                        details_url: (_b = option.detailsUrl) !== null && _b !== void 0 ? _b : undefined,
-                    })];
-                case 4:
-                    response = _c.sent();
-                    if (400 <= response.status) {
-                        throw new Error("cannot create check run");
-                    }
-                    (0, state_1.setState)({ checkRunId: response.data.id, failed: false });
-                    core.info("check run created");
-                    return [2 /*return*/, response.data.id];
-                case 5: return [3 /*break*/, 7];
-                case 6:
-                    error_1 = _c.sent();
-                    if (error_1 instanceof Error) {
-                        core.setFailed(error_1.message);
-                    }
-                    (0, state_1.setState)({ checkRunId: null, failed: true });
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/, null];
+async function run() {
+    try {
+        const option = (0, option_1.getOption)();
+        const client = github.getOctokit(option.githubToken);
+        const owner = option.repository.split("/")[0];
+        const repository = option.repository.split("/")[1];
+        core.info("find check run");
+        const foundCheckRunId = await findCheckRun(client, owner, repository, option.sha, option.name);
+        core.info(`found check run: ${foundCheckRunId != null}`);
+        if (foundCheckRunId != null) {
+            const response = await client.rest.checks.update({
+                owner: owner,
+                repo: repository,
+                check_run_id: foundCheckRunId,
+                status: "in_progress",
+                details_url: option.detailsUrl ?? undefined,
+            });
+            if (400 <= response.status) {
+                throw new Error("cannot update check run");
             }
-        });
-    });
+            (0, state_1.setState)({ checkRunId: foundCheckRunId, failed: false });
+            core.info(`found check run updated`);
+            return foundCheckRunId;
+        }
+        else {
+            const response = await client.rest.checks.create({
+                owner: owner,
+                repo: repository,
+                name: option.name,
+                head_sha: option.sha,
+                status: "in_progress",
+                details_url: option.detailsUrl ?? undefined,
+            });
+            if (400 <= response.status) {
+                throw new Error("cannot create check run");
+            }
+            (0, state_1.setState)({ checkRunId: response.data.id, failed: false });
+            core.info("check run created");
+            return response.data.id;
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
+        (0, state_1.setState)({ checkRunId: null, failed: true });
+    }
+    return null;
 }
 exports.run = run;
 run();
@@ -9350,9 +9239,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setState = exports.getState = void 0;
-var core = __importStar(__nccwpck_require__(2186));
+const core = __importStar(__nccwpck_require__(2186));
 function getState() {
-    var checkRunId = core.getState("check_run_id");
+    const checkRunId = core.getState("check_run_id");
     return {
         checkRunId: checkRunId.length == 0 ? null : parseInt(checkRunId),
         failed: core.getState("failed") == "true",
@@ -9360,8 +9249,7 @@ function getState() {
 }
 exports.getState = getState;
 function setState(state) {
-    var _a;
-    core.saveState("check_run_id", "".concat((_a = state.checkRunId) !== null && _a !== void 0 ? _a : ""));
+    core.saveState("check_run_id", `${state.checkRunId ?? ""}`);
     core.saveState("failed", state.failed ? "true" : "false");
 }
 exports.setState = setState;
