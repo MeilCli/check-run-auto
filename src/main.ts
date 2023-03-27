@@ -13,7 +13,7 @@ const conclusionList = [
     "timed_out",
     "action_required",
 ] as const;
-type Conclusion = typeof conclusionList[number];
+type Conclusion = typeof (conclusionList[number]);
 
 async function run() {
     const checkRunId = await preRun();
