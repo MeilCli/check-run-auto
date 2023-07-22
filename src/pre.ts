@@ -9,7 +9,7 @@ async function findCheckRun(
     owner: string,
     repository: string,
     sha: string,
-    name: string
+    name: string,
 ): Promise<number | null> {
     const response = await client.rest.checks.listForRef({
         owner: owner,
